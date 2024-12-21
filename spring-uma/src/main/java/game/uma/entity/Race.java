@@ -1,6 +1,7 @@
 package game.uma.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "races")
@@ -11,12 +12,15 @@ public class Race {
     private int id;
 
     @Column(name = "year")
-    private int year;
+    @NotNull(message = "This is required.")
+    private Integer year;
 
     @Column(name = "jockey")
+    @NotNull(message = "This is required.")
     private String jockey;
 
     @Column(name = "place")
+    @NotNull(message = "This is required.")
     private String place;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -46,11 +50,11 @@ public class Race {
     }
 
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

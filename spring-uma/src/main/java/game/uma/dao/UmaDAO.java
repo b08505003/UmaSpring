@@ -8,18 +8,22 @@ import java.util.List;
 
 public interface UmaDAO {
 
-    List<Uma> findAllUmas();
-
+    List<Uma> findUmas();
     List<Race> findRaces();
+    List<RaceInfo> findRaceInfos();
 
     Uma findUmaById(int id);
+    Race findRaceById(int id);
+    RaceInfo findRaceInfoByTitle(String title);
 
     List<Uma> getRandomUmas(int count);
 
-    List<RaceInfo> findAllRaceInfos();
-
     void save(Uma uma);
+    void save(Race race);
+    void save(RaceInfo raceInfo);
 
     void delete(Uma uma);
+    void delete(Race race);
+    void delete(RaceInfo raceInfo);
 
 }

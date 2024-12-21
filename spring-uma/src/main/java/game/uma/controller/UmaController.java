@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/umas/manage")
+@RequestMapping("/umas/manage/uma")
 public class UmaController {
 
     private UmaDAO umaDAO;
@@ -31,41 +31,50 @@ public class UmaController {
         dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
+
     @GetMapping("")
-    public String manage(Model model){
-        List<Uma> umas = umaDAO.findAllUmas();
+    public String showUmaTable(Model model){
+        List<Uma> umas = umaDAO.findUmas();
         model.addAttribute("umas", umas);
-        return "/manage/uma-list-for-management";
+        return "/table/uma-table";
     }
 
     @GetMapping("/add")
     public String add(Model model){
         model.addAttribute("uma", new Uma());
-        return "/manage/uma-form";
+        return "/form/uma-form";
+    }
+
+    @GetMapping("/addRace")
+    public String addRace(@RequestParam("umaId") int id, Model model){
+        Uma uma = umaDAO.findUmaById(id);
+        model.addAttribute("uma", uma);
+        model.addAttribute("races", uma.getRaces());
+        return "/table/race-table";
     }
 
     @GetMapping("/update")
     public String update(@RequestParam("umaId") int id, Model model){
         Uma uma = umaDAO.findUmaById(id);
         model.addAttribute("uma", uma);
-        return "/manage/uma-form";
+        return "/form/uma-form";
     }
 
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("uma") Uma uma, BindingResult bindingResult){
         System.out.println(bindingResult.toString());
         if(bindingResult.hasErrors()){
-            return "/manage/uma-form";
+            return "/form/uma-form";
         }
         umaDAO.save(uma);
-        return "redirect:/umas/manage";
+        return "redirect:/umas/manage/uma";
     }
 
     @GetMapping("/delete")
     public String delete(@RequestParam("umaId") int id){
         Uma uma = umaDAO.findUmaById(id);
         umaDAO.delete(uma);
-        return "redirect:/umas/manage";
+        return "redirect:/umas/manage/uma";
     }
 
 

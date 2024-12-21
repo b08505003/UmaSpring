@@ -37,7 +37,7 @@ public class GameController {
 
     @GetMapping("/list")
     public String showList(Model model){
-        List<Uma> umas = umaDAO.findAllUmas();
+        List<Uma> umas = umaDAO.findUmas();
         model.addAttribute("umas", umas);
         return "/list/uma-list";
     }
@@ -83,10 +83,17 @@ public class GameController {
 
         } else { // if submit is clicked
 
-            if (answer.equals(currentQuiz.getUma().getNameJP())) { // correct answer
+            // List names of correct answers
+            Uma uma = currentQuiz.getUma();
+            List<String> names = new ArrayList<>();
+            names.add(uma.getNameJP());
+            names.add(uma.getNameCH());
+            names.add(uma.getNameEN());
+
+            if (names.contains(answer)) { // correct answer
 
                 model.addAttribute("correctMessage", "Correct Answer!");
-                quizzes.get(currentIndex).setPoint(pointEachQuiz); // points each quiz can get
+                quizzes.get(currentIndex).setPoint(pointEachQuiz);
 
             } else { // wrong answer
 

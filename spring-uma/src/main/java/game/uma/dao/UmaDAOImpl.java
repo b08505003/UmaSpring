@@ -19,7 +19,7 @@ public class UmaDAOImpl implements UmaDAO{
     }
 
     @Override
-    public List<Uma> findAllUmas() {
+    public List<Uma> findUmas() {
         return entityManager.createQuery("from Uma", Uma.class).getResultList();
     }
 
@@ -29,19 +29,30 @@ public class UmaDAOImpl implements UmaDAO{
     }
 
     @Override
+    public List<RaceInfo> findRaceInfos() {
+        return entityManager.createQuery("from RaceInfo", RaceInfo.class).getResultList();
+    }
+
+    @Override
     public Uma findUmaById(int id) {
         return entityManager.find(Uma.class, id);
     }
 
     @Override
-    public List<Uma> getRandomUmas(int count) {
-        return entityManager.createQuery("SELECT u FROM Uma u ORDER BY FUNCTION('RAND')", Uma.class)
-                .setMaxResults(count).getResultList();
+    public Race findRaceById(int id) {
+        return entityManager.find(Race.class, id);
     }
 
     @Override
-    public List<RaceInfo> findAllRaceInfos() {
-        return entityManager.createQuery("from RaceInfo", RaceInfo.class).getResultList();
+    public RaceInfo findRaceInfoByTitle(String title) {
+        return entityManager.find(RaceInfo.class, title);
+    }
+
+
+    @Override
+    public List<Uma> getRandomUmas(int count) {
+        return entityManager.createQuery("SELECT u FROM Uma u ORDER BY FUNCTION('RAND')", Uma.class)
+                .setMaxResults(count).getResultList();
     }
 
     @Override
@@ -52,7 +63,31 @@ public class UmaDAOImpl implements UmaDAO{
 
     @Override
     @Transactional
+    public void save(Race race) {
+        entityManager.merge(race);
+    }
+
+    @Override
+    @Transactional
+    public void save(RaceInfo raceInfo) {
+        entityManager.merge(raceInfo);
+    }
+
+    @Override
+    @Transactional
     public void delete(Uma uma) {
         entityManager.remove(uma);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Race race) {
+        entityManager.remove(race);
+    }
+
+    @Override
+    @Transactional
+    public void delete(RaceInfo raceInfo) {
+        entityManager.remove(raceInfo);
     }
 }
