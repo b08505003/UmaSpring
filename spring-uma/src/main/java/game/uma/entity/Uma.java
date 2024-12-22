@@ -31,6 +31,9 @@ public class Uma {
     @Column(name = "adapt")
     private String adapt;
 
+    @Column(name = "difficulty")
+    private int difficulty;
+
     @OneToMany(mappedBy = "uma", fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Race> races;
@@ -39,11 +42,12 @@ public class Uma {
 
     }
 
-    public Uma(String nameJP, String nameCH, String nameEN, String adapt) {
+    public Uma(String nameJP, String nameCH, String nameEN, String adapt, int difficulty) {
         this.nameJP = nameJP;
         this.nameCH = nameCH;
         this.nameEN = nameEN;
         this.adapt = adapt;
+        this.difficulty = difficulty;
     }
 
     public int getId() {
@@ -86,6 +90,14 @@ public class Uma {
         this.adapt = adapt;
     }
 
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public List<Race> getRaces() {
         return races;
     }
@@ -109,6 +121,7 @@ public class Uma {
                 ", nameCH='" + nameCH + '\'' +
                 ", nameEN='" + nameEN + '\'' +
                 ", adapt='" + adapt + '\'' +
+                ", difficulty=" + difficulty +
                 '}';
     }
 }

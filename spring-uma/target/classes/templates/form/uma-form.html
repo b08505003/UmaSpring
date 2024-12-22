@@ -53,6 +53,17 @@
             <input type="text" th:field="*{adapt}" class="form-control">
         </div>
 
+        <!-- Difficulty Input group -->
+        <div class="input-group mb-3">
+            <span class="input-group-text">Difficulty</span>
+            <select class="form-select form-select-sm" th:field="*{difficulty}">
+                <option th:text="1" th:value="1" th:selected="${uma.difficulty}==1" />
+                <option th:text="2" th:value="2" th:selected="${uma.difficulty}==2" />
+                <option th:text="3" th:value="3" th:selected="${uma.difficulty}==3" />
+                <option th:text="4" th:value="4" th:selected="${uma.difficulty}==4" />
+            </select>
+        </div>
+
         <!-- Save button -->
         <button type="submit" class="btn btn-outline-primary">Save</button>
     </form>
