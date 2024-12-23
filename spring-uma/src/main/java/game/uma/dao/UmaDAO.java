@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface UmaDAO {
 
+    List<Uma> findUmas(int difficulty);
     List<Uma> findUmas();
     List<Race> findRaces();
     List<RaceInfo> findRaceInfos();
@@ -16,7 +17,7 @@ public interface UmaDAO {
     Race findRaceById(int id);
     RaceInfo findRaceInfoByTitle(String title);
 
-    List<Uma> getRandomUmas(int count);
+    List<Uma> getRandomUmas(int count, int difficulty);
 
     void save(Uma uma);
     void save(Race race);

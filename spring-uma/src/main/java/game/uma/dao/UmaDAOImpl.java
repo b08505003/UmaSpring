@@ -4,6 +4,7 @@ import game.uma.entity.Race;
 import game.uma.entity.RaceInfo;
 import game.uma.entity.Uma;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,14 @@ public class UmaDAOImpl implements UmaDAO{
 
     public UmaDAOImpl(EntityManager em){
         entityManager = em;
+    }
+
+    @Override
+    public List<Uma> findUmas(int difficulty) {
+        var query = entityManager.createQuery(
+                "select u from Uma u where u.difficulty <= :data", Uma.class);
+        query.setParameter("data", difficulty);
+        return query.getResultList();
     }
 
     @Override
@@ -50,9 +59,11 @@ public class UmaDAOImpl implements UmaDAO{
 
 
     @Override
-    public List<Uma> getRandomUmas(int count) {
-        return entityManager.createQuery("SELECT u FROM Uma u ORDER BY FUNCTION('RAND')", Uma.class)
-                .setMaxResults(count).getResultList();
+    public List<Uma> getRandomUmas(int count, int difficulty) {
+        TypedQuery<Uma> query = entityManager.createQuery(
+                "SELECT u FROM Uma u WHERE u.difficulty <= :data ORDER BY FUNCTION('RAND')", Uma.class);
+        query.setParameter("data", difficulty);
+        return query.setMaxResults(count).getResultList();
     }
 
     @Override

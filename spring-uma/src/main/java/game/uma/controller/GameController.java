@@ -15,16 +15,18 @@ import java.util.List;
 @RequestMapping("/umas")
 public class GameController {
     private UmaDAO umaDAO;
+    private SettingController settingController;
 
     private List<Quiz> quizzes;
     private int currentIndex;
 
-    // could be changed
-    private static int quizCount = 5;
-    private static int pointEachQuiz = 10;
+    // from setting
+    private int quizCount;
+    private int difficulty;
 
-    public GameController(UmaDAO umaDAO){
+    public GameController(UmaDAO umaDAO, SettingController settingController){
         this.umaDAO = umaDAO;
+        this.settingController = settingController;
     }
 
     @GetMapping("")
@@ -37,7 +39,7 @@ public class GameController {
 
     @GetMapping("/list")
     public String showList(Model model){
-        List<Uma> umas = umaDAO.findUmas();
+        List<Uma> umas = umaDAO.findUmas(SettingController.getDifficulty());
         model.addAttribute("umas", umas);
         return "/list/uma-list";
     }
@@ -47,10 +49,14 @@ public class GameController {
 
         // select random umas if it is the first quiz (session game start flag has not been flipped)
         if(!(boolean)session.getAttribute("gameStart")){
+            // initialize setting parameters
+            quizCount = SettingController.getQuizCount();
+            difficulty = SettingController.getDifficulty();
+
             currentIndex = 0;
             quizzes = new ArrayList<>();
 
-            var quizUmas = umaDAO.getRandomUmas(quizCount);
+            var quizUmas = umaDAO.getRandomUmas(quizCount, difficulty);
             for(int i = 0; i < quizCount; i++){
                 Quiz quiz = new Quiz(i+1, quizUmas.get(i));
                 quizzes.add(quiz);
@@ -93,7 +99,7 @@ public class GameController {
             if (names.contains(answer)) { // correct answer
 
                 model.addAttribute("correctMessage", "Correct Answer!");
-                quizzes.get(currentIndex).setPoint(pointEachQuiz);
+                quizzes.get(currentIndex).setPoint(SettingController.getPointEachQuiz());
 
             } else { // wrong answer
 
@@ -135,7 +141,7 @@ public class GameController {
         }
 
         model.addAttribute("getPoints", getPoints);
-        model.addAttribute("totalPoints", pointEachQuiz*quizCount);
+        model.addAttribute("totalPoints", SettingController.getPointEachQuiz()*quizCount);
         model.addAttribute("quizzes", quizzes);
         return "/game/result";
     }
